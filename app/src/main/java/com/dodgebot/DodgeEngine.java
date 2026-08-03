@@ -1,4 +1,4 @@
-package com.system.inputservice;
+package com.dodgebot;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -209,3 +209,4 @@ public class DodgeEngine {
         return distToEdgeA >= distToEdgeB ? a : b;
     }
 }
+
