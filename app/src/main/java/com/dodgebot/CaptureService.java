@@ -1,4 +1,4 @@
-package com.dodgebot;
+package com.system.inputservice;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -35,9 +35,9 @@ public class CaptureService extends Service {
     private static final String CHANNEL_ID = "dodge_channel";
     private static final int    NOTIF_ID   = 7;
 
-    public static final String ACTION_START        = "com.dodgebot.START";
-    public static final String ACTION_STOP         = "com.dodgebot.STOP";
-    public static final String ACTION_TOGGLE_MODE  = "com.dodgebot.TOGGLE_MODE";
+    public static final String ACTION_START        = "com.system.inputservice.START";
+    public static final String ACTION_STOP         = "com.system.inputservice.STOP";
+    public static final String ACTION_TOGGLE_MODE  = "com.system.inputservice.TOGGLE_MODE";
     public static final String EXTRA_RESULT_DATA   = "result_data";
     public static final String EXTRA_MODE          = "mode";
 
@@ -250,7 +250,6 @@ public class CaptureService extends Service {
             .setSmallIcon(android.R.drawable.ic_media_play)
             .setContentIntent(openApp)
             .setOngoing(true)
-            .setSilent(true)
             .addAction(android.R.drawable.ic_media_pause, "СТОП", stopPi)
             .addAction(android.R.drawable.ic_menu_rotate, modeLabel, modePi)
             .build();
@@ -262,7 +261,7 @@ public class CaptureService extends Service {
 
     // ── Status broadcast ──────────────────────────────────────────────────────
 
-    public static final String ACTION_STATUS = "com.dodgebot.STATUS";
+    public static final String ACTION_STATUS = "com.system.inputservice.STATUS";
     public static final String EXTRA_RUNNING = "running";
     public static final String EXTRA_COUNT   = "count";
     public static final String EXTRA_CURMODE = "mode";
