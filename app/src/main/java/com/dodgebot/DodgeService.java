@@ -1,4 +1,4 @@
-package com.system.inputservice;
+package com.dodgebot;
 
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.GestureDescription;
@@ -28,7 +28,7 @@ public class DodgeService extends AccessibilityService {
 
     private static final String TAG = "DodgeService";
 
-    public static final String ACTION_DODGE = "com.system.inputservice.DODGE";
+    public static final String ACTION_DODGE = "com.dodgebot.DODGE";
     public static final String EXTRA_ANGLE  = "angle";
     public static final String EXTRA_DASH   = "dash";
 
@@ -169,4 +169,3 @@ public class DodgeService extends AccessibilityService {
 
     public boolean isActive() { return instance != null; }
 }
-
