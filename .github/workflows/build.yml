@@ -3,33 +3,44 @@ on:
   push:
     branches: [ main ]
   workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: dodgebot
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
           cache: gradle
+
       - name: Bootstrap wrapper jar
         run: |
           if [ ! -f gradle/wrapper/gradle-wrapper.jar ]; then
             curl -fsSL -o gradle/wrapper/gradle-wrapper.jar \
               "https://github.com/gradle/gradle/raw/refs/tags/v8.4.0/gradle/wrapper/gradle-wrapper.jar"
           fi
+
       - run: chmod +x gradlew
+
       - uses: actions/cache@v4
         with:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          key: ${{ runner.os }}-gradle-${{ hashFiles('dodgebot/**/*.gradle*') }}
+
       - name: Build debug APK
         run: ./gradlew assembleDebug --stacktrace
+
       - uses: actions/upload-artifact@v4
         with:
           name: dodgebot-debug
-          path: app/build/outputs/apk/debug/app-debug.apk
+          path: dodgebot/app/build/outputs/apk/debug/app-debug.apk
           retention-days: 30
