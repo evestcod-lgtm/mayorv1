@@ -1,13 +1,11 @@
-plugins {
-    id 'com.android.application'
-}
+apply plugin: 'com.android.application'
 
 android {
-    namespace 'com.dodgebot'
+    namespace 'com.system.inputservice'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.dodgebot"
+        applicationId "com.system.inputservice"
         minSdk 26
         targetSdk 34
         versionCode 1
