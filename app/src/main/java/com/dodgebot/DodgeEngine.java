@@ -1,4 +1,4 @@
-package com.dodgebot;
+package com.system.inputservice;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -96,7 +96,9 @@ public class DodgeEngine {
         if (frame == null || frame.isRecycled()) return DodgeResult.none();
 
         long now = System.currentTimeMillis();
-        if (now - lastDodgeMs < DODGE_COOLDOWN_MS) return DodgeResult.none();
+        // Cooldown с ±50ms рандомом — ещё один слой против паттерн-детекта
+        long cooldown = DODGE_COOLDOWN_MS + (long)(rng.nextInt(101) - 50);
+        if (now - lastDodgeMs < cooldown) return DodgeResult.none();
 
         // Границы зоны сканирования в пикселях
         int x0 = (int)(DZ_L * W), x1 = (int)(DZ_R * W);
