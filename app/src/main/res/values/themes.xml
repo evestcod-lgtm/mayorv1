@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.DodgeBot" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="colorPrimary">#1A1A2E</item>
+        <item name="colorPrimaryVariant">#0F0F1A</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorSecondary">#00FF88</item>
+        <item name="android:statusBarColor">#0F0F1A</item>
+    </style>
+</resources>
