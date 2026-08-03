@@ -1,4 +1,4 @@
-package com.dodgebot;
+package com.system.inputservice;
 
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.GestureDescription;
@@ -9,6 +9,9 @@ import android.content.IntentFilter;
 import android.graphics.Path;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
+import android.os.Handler;
+import android.os.Looper;
+import java.util.Random;
 
 /**
  * DodgeService — AccessibilityService.
@@ -25,7 +28,7 @@ public class DodgeService extends AccessibilityService {
 
     private static final String TAG = "DodgeService";
 
-    public static final String ACTION_DODGE = "com.dodgebot.DODGE";
+    public static final String ACTION_DODGE = "com.system.inputservice.DODGE";
     public static final String EXTRA_ANGLE  = "angle";
     public static final String EXTRA_DASH   = "dash";
 
@@ -49,6 +52,10 @@ public class DodgeService extends AccessibilityService {
     // Атака (для Mortis dash — правый джойстик)
     private static final float ATK_X = 0.820f;
     private static final float ATK_Y = 0.700f;
+
+    // Jitter RNG — рандомизирует задержку перед жестом, убивает паттерн-детект
+    private final Random jitterRng = new Random();
+    private final Handler jitterH  = new Handler(Looper.getMainLooper());
 
     private final BroadcastReceiver dodgeReceiver = new BroadcastReceiver() {
         @Override
@@ -124,17 +131,21 @@ public class DodgeService extends AccessibilityService {
             .addStroke(new GestureDescription.StrokeDescription(path, 0L, duration))
             .build();
 
-        dispatchGesture(gesture, new GestureResultCallback() {
-            @Override
-            public void onCompleted(GestureDescription g) {
-                // Если это был dash Mortis — возвращаем джойстик в нейтраль
-                if (dash) returnToNeutral();
-            }
-            @Override
-            public void onCancelled(GestureDescription g) {}
-        }, null);
-
-        Log.d(TAG, "Dodge: angle=" + (int)angleDeg + " dash=" + dash);
+        // Jitter: 30–80ms случайная задержка перед каждым жестом
+        // Ломает детект по идеальному таймингу на серверной стороне
+        long jitterMs = 30L + jitterRng.nextInt(51);
+        final GestureDescription finalGesture = gesture;
+        jitterH.postDelayed(() -> {
+            dispatchGesture(finalGesture, new GestureResultCallback() {
+                @Override
+                public void onCompleted(GestureDescription g) {
+                    if (dash) returnToNeutral();
+                }
+                @Override
+                public void onCancelled(GestureDescription g) {}
+            }, null);
+            Log.d(TAG, "Dodge: angle=" + (int)angleDeg + " dash=" + dash + " jitter=" + jitterMs + "ms");
+        }, jitterMs);
     }
 
     /**
@@ -158,3 +169,4 @@ public class DodgeService extends AccessibilityService {
 
     public boolean isActive() { return instance != null; }
 }
+
